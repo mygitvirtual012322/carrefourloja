@@ -66,21 +66,47 @@
             const self = this;
             // Intercepta cliques no ícone do carrinho GLOBALMENTE
             document.addEventListener('click', function(e) {
-                const cartIcon = e.target.closest('.cfar-ico--cart, a[href*="/cart"]');
+                const cartIcon = e.target.closest('.cfar-ico--cart, a[href*="/cart"], a[href*="cart"]');
                 if (cartIcon) {
-                    const href = cartIcon.getAttribute('href') || '';
-                    // Se é link para cart da Shopify, intercepta
-                    if (href.includes('myshopify.com/cart') || href === '/cart' || href.includes('/cart')) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        e.stopImmediatePropagation();
-                        console.log('🛒 Ícone do carrinho clicado - redirecionando para nosso cart');
-                        const cartPath = self.getCartPath();
-                        window.location.href = cartPath;
+                    e.preventDefault();
+                    e.stopPropagation();
+                    e.stopImmediatePropagation();
+                    
+                    // Verifica se já está no cart - se sim, não faz nada
+                    const currentPath = window.location.pathname;
+                    if (currentPath.includes('/cart') || currentPath.includes('cart/index.html')) {
+                        console.log('🛒 Já está no carrinho, não redireciona');
                         return false;
                     }
+                    
+                    console.log('🛒 Ícone do carrinho clicado - redirecionando para nosso cart');
+                    const cartPath = self.getCartPath();
+                    // Usa replace para evitar flash
+                    window.location.replace(cartPath);
+                    return false;
                 }
             }, true); // Capture phase - executa ANTES de outros listeners
+            
+            // Remove hrefs dos links do carrinho para evitar navegação
+            const removeCartHrefs = () => {
+                const cartLinks = document.querySelectorAll('.cfar-ico--cart, a[href*="myshopify.com/cart"], a[href="/cart"]');
+                cartLinks.forEach(link => {
+                    const href = link.getAttribute('href');
+                    if (href && (href.includes('myshopify.com/cart') || href === '/cart' || href.includes('/cart'))) {
+                        link.setAttribute('data-original-href', href);
+                        link.removeAttribute('href');
+                        link.style.cursor = 'pointer';
+                        console.log('✅ Link do carrinho interceptado:', href);
+                    }
+                });
+            };
+            
+            // Remove hrefs imediatamente
+            removeCartHrefs();
+            
+            // Remove hrefs quando o DOM mudar (para elementos dinâmicos)
+            const observer = new MutationObserver(removeCartHrefs);
+            observer.observe(document.body, { childList: true, subtree: true });
         }
         
         interceptCheckoutForms() {
