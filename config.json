@@ -1,0 +1,10 @@
+{
+  "shopifyStore": "twqm8i-xi.myshopify.com",
+  "shopifyPassword": "123",
+  "checkoutBaseUrl": "https://seguro.pagou.ai/checkout",
+  "checkoutModel": "modern",
+  "currency": "BRL",
+  "productMapping": {
+    "wc-wc-universal-compact-zeus-domino": "c22ec8e7-a66c-47e1-8b02-4c023d3a351a"
+  }
+}

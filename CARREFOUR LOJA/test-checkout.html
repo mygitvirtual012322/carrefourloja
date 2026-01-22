@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Teste Checkout Pagou.ai</title>
+</head>
+<body>
+    <h1>Teste Checkout Pagou.ai</h1>
+    <button id="testBtn">Testar Checkout</button>
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('testBtn').addEventListener('click', async function() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '⏳ Testando...';
+            
+            // UUID do produto na Pagou.ai
+            const pagouProductUuid = 'c22ec8e7-a66c-47e1-8b02-4c023d3a351a';
+            
+            // Dados do produto
+            const shopifyCartItems = [{
+                // Testando diferentes formatos
+                id: pagouProductUuid,  // UUID como string
+                product_id: pagouProductUuid,  // UUID como string
+                variant_id: 47479084187892, // ID do Shopify
+                // Tentando também com campos alternativos
+                pagou_product_id: pagouProductUuid,
+                pagou_uuid: pagouProductUuid,
+                external_id: pagouProductUuid,
+                quantity: 1,
+                title: 'WC WC Universal Compact Zeus Domino',
+                product_title: 'WC WC Universal Compact Zeus Domino',
+                price: 3667600, // Preço em centavos (ARS 36.676,00)
+                original_price: 3667600,
+                final_price: 3667600,
+                line_price: 3667600,
+                final_line_price: 3667600,
+                properties: {},
+                sku: '',
+                vendor: 'Minha Loja',
+                taxable: true,
+                requires_shipping: true,
+                gift_card: false,
+                url: '/products/wc-wc-universal-compact-zeus-domino',
+                handle: 'wc-wc-universal-compact-zeus-domino',
+                image: 'http://twqm8i-xi.myshopify.com/cdn/shop/files/media_8d807b85-b058-4502-a526-4a49e7fd5a8d.webp?v=1769014288',
+                featured_image: {
+                    aspect_ratio: 1.0,
+                    alt: 'WC WC Universal Compact Zeus Domino',
+                    height: 500,
+                    url: 'http://twqm8i-xi.myshopify.com/cdn/shop/files/media_8d807b85-b058-4502-a526-4a49e7fd5a8d.webp?v=1769014288',
+                    width: 500
+                },
+                variant_title: 'Default Title',
+                product_type: '',
+                product_description: '',
+                key: `${pagouProductUuid}:${Date.now()}`,
+                discounts: [],
+                total_discount: 0,
+                line_level_discount_allocations: [],
+                line_level_total_discount: 0
+            }];
+
+            const shopifyCart = {
+                token: Date.now().toString() + '-' + Math.random().toString(36).substr(2, 9),
+                note: null,
+                attributes: {},
+                original_total_price: 3667600,
+                total_price: 3667600,
+                total_discount: 0,
+                total_weight: 0,
+                item_count: 1,
+                items: shopifyCartItems,
+                requires_shipping: true,
+                currency: 'ARS',
+                items_subtotal_price: 3667600,
+                cart_level_discount_applications: []
+            };
+
+            const payload = {
+                shop: 'twqm8i-xi.myshopify.com',
+                shopify_internal_domain: 'twqm8i-xi.myshopify.com',
+                cart_payload: shopifyCart
+            };
+
+            console.log('📤 Payload enviado:', JSON.stringify(payload, null, 2));
+            resultDiv.innerHTML += '<br>📤 Payload enviado (veja o console)';
+
+            try {
+                const response = await fetch('https://api-checkout.pagou.ai/public/cart', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                console.log('📥 Status da resposta:', response.status, response.statusText);
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('❌ Erro HTTP:', response.status, errorText);
+                    resultDiv.innerHTML += `<br>❌ Erro: ${response.status} - ${errorText}`;
+                    return;
+                }
+
+                const data = await response.json();
+                console.log('📩 Resposta completa:', JSON.stringify(data, null, 2));
+
+                if (data && data.data && data.data.checkout_url) {
+                    const checkoutUrl = data.data.checkout_url;
+                    resultDiv.innerHTML += `<br>✅ Checkout criado!`;
+                    resultDiv.innerHTML += `<br><a href="${checkoutUrl}" target="_blank">Abrir checkout</a>`;
+                    console.log('✅ Checkout URL:', checkoutUrl);
+                } else {
+                    resultDiv.innerHTML += `<br>❌ Resposta inesperada: ${JSON.stringify(data)}`;
+                }
+            } catch (error) {
+                console.error('❌ Erro:', error);
+                resultDiv.innerHTML += `<br>❌ Erro: ${error.message}`;
+            }
+        });
+    </script>
+</body>
+</html>
+

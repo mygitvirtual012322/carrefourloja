@@ -1,0 +1,10 @@
+{
+  "shopifyStore": "twqm8i-xi.myshopify.com",
+  "shopifyPassword": "123",
+  "checkoutBaseUrl": "https://seguro.pagou.ai/checkout",
+  "checkoutModel": "modern",
+  "currency": "BRL",
+  "productMapping": {
+    "juego-comedor-terraza-jardin-exterior-4-sillas-y-quitasol-metal-1": "323e135e-2538-486f-a7e4-045d8e4dfffa"
+  }
+}

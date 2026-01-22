@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loja Clonada - 2 Produtos Configurados</title>
+    <link rel="stylesheet" href="cart-styles.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f5f5f5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 100px 20px 40px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #333;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .product-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+
+        .product-price {
+            font-size: 24px;
+            font-weight: bold;
+            color: #000;
+            margin: 10px 0;
+        }
+
+        .add-to-cart-btn {
+            width: 100%;
+            padding: 15px;
+            background: #000;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .add-to-cart-btn:hover {
+            background: #333;
+            transform: scale(1.02);
+        }
+
+        .badge {
+            display: inline-block;
+            background: #4CAF50;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196F3;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 4px;
+        }
+
+        .info-box h3 {
+            margin: 0 0 10px 0;
+            color: #1976D2;
+        }
+
+        .info-box p {
+            margin: 5px 0;
+            color: #555;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Ícone do Carrinho -->
+    <div class="cart-icon" onclick="window.cart.openCartModal()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path
+                d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z" />
+        </svg>
+        <span class="cart-count" style="display: none;">0</span>
+    </div>
+
+    <!-- Modal do Carrinho -->
+    <div id="cart-modal" class="cart-modal">
+        <div class="cart-header">
+            <h2>Meu Carrinho</h2>
+            <button class="close-cart" onclick="window.cart.closeCartModal()">&times;</button>
+        </div>
+
+        <div class="cart-body">
+            <div id="cart-items-container"></div>
+        </div>
+
+        <div class="cart-footer">
+            <div class="cart-total-row">
+                <h3>Total:</h3>
+                <span id="cart-total" class="cart-total">R$ 0,00</span>
+            </div>
+            <button class="checkout-btn" onclick="window.cart.redirectToCheckout()">
+                Finalizar Compra
+            </button>
+        </div>
+    </div>
+
+    <div class="cart-modal-overlay" onclick="window.cart.closeCartModal()"></div>
+
+    <!-- Conteúdo -->
+    <div class="container">
+        <h1>🎉 Loja Clonada - 2 Produtos Configurados!</h1>
+
+        <div class="info-box">
+            <h3>✅ Sistema Funcionando com 2 Produtos</h3>
+            <p><strong>Produto 1:</strong> Juego Comedor Terraza → UUID: 323e135e-2538-486f-a7e4-045d8e4dfffa</p>
+            <p><strong>Produto 2:</strong> WC Zeus Domino → UUID: cb20203b-813c-4683-a723-730711718766</p>
+            <p><strong>Teste:</strong> Adicione ambos ao carrinho e clique em "Finalizar Compra" para ver a seleção!</p>
+        </div>
+
+        <div class="products-grid">
+
+            <!-- Produto 1: Juego Comedor -->
+            <div class="product-card">
+                <span class="badge">✓ Configurado</span>
+                <img src="https://via.placeholder.com/400x300/4CAF50/ffffff?text=Juego+Comedor" alt="Juego Comedor"
+                    class="product-image">
+                <h3 class="product-title">Juego Comedor Terraza Jardin Exterior 4 Sillas Y Quitasol Metal</h3>
+                <p style="color: #666; font-size: 14px;">Conjunto de mesa e 4 cadeiras para área externa com guarda-sol
+                </p>
+                <p class="product-price">R$ 1.299,00</p>
+
+                <button class="add-to-cart-btn" data-product-id="prod-001"
+                    data-product-handle="juego-comedor-terraza-jardin-exterior-4-sillas-y-quitasol-metal-1"
+                    data-product-title="Juego Comedor Terraza Jardin Exterior" data-product-price="1299.00"
+                    data-product-image="https://via.placeholder.com/400x300/4CAF50/ffffff?text=Juego+Comedor"
+                    data-product-url="/products/juego-comedor" data-checkout-id="323e135e-2538-486f-a7e4-045d8e4dfffa">
+                    Adicionar ao Carrinho
+                </button>
+            </div>
+
+            <!-- Produto 2: WC Zeus Domino -->
+            <div class="product-card">
+                <span class="badge">✓ Configurado</span>
+                <img src="https://via.placeholder.com/400x300/2196F3/ffffff?text=WC+Zeus+Domino" alt="WC Zeus Domino"
+                    class="product-image">
+                <h3 class="product-title">WC WC Universal Compact Zeus Domino</h3>
+                <p style="color: #666; font-size: 14px;">Vaso sanitário compacto universal com assento soft-close e
+                    design ergonômico</p>
+                <p class="product-price">R$ 899,00</p>
+
+                <button class="add-to-cart-btn" data-product-id="prod-002"
+                    data-product-handle="wc-wc-universal-compact-zeus-domino"
+                    data-product-title="WC WC Universal Compact Zeus Domino" data-product-price="899.00"
+                    data-product-image="https://via.placeholder.com/400x300/2196F3/ffffff?text=WC+Zeus+Domino"
+                    data-product-url="/products/wc-zeus-domino" data-checkout-id="cb20203b-813c-4683-a723-730711718766">
+                    Adicionar ao Carrinho
+                </button>
+            </div>
+
+        </div>
+
+        <div class="info-box" style="background: #fff3cd; border-color: #ffc107;">
+            <h3 style="color: #856404;">💡 Como Funciona</h3>
+            <p><strong>1 produto no carrinho:</strong> Redireciona direto para o checkout</p>
+            <p><strong>2+ produtos no carrinho:</strong> Mostra modal para você escolher qual comprar</p>
+            <p><strong>Checkout:</strong> Abre o pagou.ai com o UUID correto do produto selecionado</p>
+        </div>
+
+    </div>
+
+    <script src="cart-system.js"></script>
+</body>
+
+</html>

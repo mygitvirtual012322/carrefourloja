@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎉 SOLUÇÃO FINAL - Múltiplos Produtos!</title>
+    <link rel="stylesheet" href="cart-styles.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 60px 20px 40px;
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            margin: 0 0 20px 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero p {
+            font-size: 20px;
+            opacity: 0.9;
+        }
+
+        .success-badge {
+            display: inline-block;
+            background: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            margin: 20px 0;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px 40px;
+        }
+
+        .info-box {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .info-box h2 {
+            margin: 0 0 15px 0;
+            color: #333;
+        }
+
+        .info-box ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .info-box li {
+            margin: 10px 0;
+            color: #666;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 48px;
+        }
+
+        .product-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+
+        .product-price {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+            margin: 10px 0;
+        }
+
+        .add-to-cart-btn {
+            width: 100%;
+            padding: 15px;
+            background: #667eea;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .add-to-cart-btn:hover {
+            background: #5568d3;
+            transform: scale(1.02);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Ícone do Carrinho -->
+    <div class="cart-icon" onclick="window.cart.openCartModal()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path
+                d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z" />
+        </svg>
+        <span class="cart-count" style="display: none;">0</span>
+    </div>
+
+    <!-- Modal do Carrinho -->
+    <div id="cart-modal" class="cart-modal">
+        <div class="cart-header">
+            <h2>Meu Carrinho</h2>
+            <button class="close-cart" onclick="window.cart.closeCartModal()">&times;</button>
+        </div>
+
+        <div class="cart-body">
+            <div id="cart-items-container"></div>
+        </div>
+
+        <div class="cart-footer">
+            <div class="cart-total-row">
+                <h3>Total:</h3>
+                <span id="cart-total" class="cart-total">R$ 0,00</span>
+            </div>
+            <button class="checkout-btn" onclick="window.cart.redirectToCheckout()">
+                Finalizar Compra
+            </button>
+        </div>
+    </div>
+
+    <div class="cart-modal-overlay" onclick="window.cart.closeCartModal()"></div>
+
+    <!-- Conteúdo -->
+    <div class="hero">
+        <h1>🎉 SOLUÇÃO COMPLETA!</h1>
+        <div class="success-badge">✅ API Pública Descoberta!</div>
+        <p>Checkout com múltiplos produtos funcionando!</p>
+    </div>
+
+    <div class="container">
+
+        <div class="info-box">
+            <h2>🚀 O Que Foi Descoberto</h2>
+            <ul>
+                <li>✅ <strong>API Pública do pagou.ai</strong>: <code>POST /public/cart</code></li>
+                <li>✅ <strong>Sem autenticação</strong>: Não precisa de API key!</li>
+                <li>✅ <strong>Múltiplos produtos</strong>: Aceita quantos produtos quiser</li>
+                <li>✅ <strong>Link dinâmico</strong>: Gera UUID único para cada carrinho</li>
+                <li>✅ <strong>Sem mapeamento</strong>: Não precisa configurar UUID de cada produto!</li>
+            </ul>
+        </div>
+
+        <div class="info-box">
+            <h2>💡 Como Funciona</h2>
+            <ul>
+                <li>1. Cliente adiciona produtos ao carrinho</li>
+                <li>2. Clica em "Finalizar Compra"</li>
+                <li>3. Sistema chama API do pagou.ai com todos os produtos</li>
+                <li>4. API retorna link do checkout dinâmico</li>
+                <li>5. Cliente é redirecionado para checkout com TODOS os produtos!</li>
+            </ul>
+        </div>
+
+        <h2 style="color: white; text-align: center; margin: 40px 0 20px;">Teste Agora!</h2>
+
+        <div class="products-grid">
+
+            <!-- Produto 1 -->
+            <div class="product-card">
+                <div class="product-image">🪑</div>
+                <h3 class="product-title">Juego Comedor Terraza Jardin Exterior</h3>
+                <p style="color: #666; font-size: 14px;">Conjunto de mesa e 4 cadeiras para área externa</p>
+                <p class="product-price">R$ 1.299,00</p>
+
+                <button class="add-to-cart-btn" data-product-id="prod-001" data-product-handle="juego-comedor"
+                    data-product-title="Juego Comedor Terraza Jardin Exterior" data-product-price="1299.00"
+                    data-product-image="https://via.placeholder.com/400x300/667eea/ffffff?text=Juego+Comedor"
+                    data-product-url="/products/juego-comedor" data-checkout-id="323e135e-2538-486f-a7e4-045d8e4dfffa">
+                    Adicionar ao Carrinho
+                </button>
+            </div>
+
+            <!-- Produto 2 -->
+            <div class="product-card">
+                <div class="product-image">🚽</div>
+                <h3 class="product-title">WC Universal Compact Zeus Domino</h3>
+                <p style="color: #666; font-size: 14px;">Vaso sanitário compacto com assento soft-close</p>
+                <p class="product-price">R$ 899,00</p>
+
+                <button class="add-to-cart-btn" data-product-id="prod-002" data-product-handle="wc-zeus-domino"
+                    data-product-title="WC Universal Compact Zeus Domino" data-product-price="899.00"
+                    data-product-image="https://via.placeholder.com/400x300/764ba2/ffffff?text=WC+Zeus"
+                    data-product-url="/products/wc-zeus" data-checkout-id="cb20203b-813c-4683-a723-730711718766">
+                    Adicionar ao Carrinho
+                </button>
+            </div>
+
+            <!-- Produto 3 -->
+            <div class="product-card">
+                <div class="product-image">🛁</div>
+                <h3 class="product-title">Bañadera Negra Simplon</h3>
+                <p style="color: #666; font-size: 14px;">Banheira moderna 112cm em preto</p>
+                <p class="product-price">R$ 2.163,00</p>
+
+                <button class="add-to-cart-btn" data-product-id="prod-003" data-product-handle="banera-negra"
+                    data-product-title="Bañadera Negra Simplon" data-product-price="2163.00"
+                    data-product-image="https://via.placeholder.com/400x300/667eea/ffffff?text=Banera"
+                    data-product-url="/products/banera" data-checkout-id="dummy-uuid-3">
+                    Adicionar ao Carrinho
+                </button>
+            </div>
+
+        </div>
+
+        <div class="info-box" style="margin-top: 40px; background: #fff3cd; border-left: 4px solid #ffc107;">
+            <h2 style="color: #856404;">🎯 Teste o Fluxo Completo</h2>
+            <ul style="color: #856404;">
+                <li>Adicione os 3 produtos ao carrinho</li>
+                <li>Clique no ícone do carrinho (canto superior direito)</li>
+                <li>Clique em "Finalizar Compra"</li>
+                <li>Veja a mágica acontecer! ✨</li>
+            </ul>
+        </div>
+
+    </div>
+
+    <!-- Scripts -->
+    <script src="pagouai-integration.js"></script>
+    <script src="cart-system-v2.js"></script>
+</body>
+
+</html>

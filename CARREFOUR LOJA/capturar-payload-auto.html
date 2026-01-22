@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Capturar Payload Pagou.ai - Automático</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .step {
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .highlight {
+            background: #fff3cd;
+            padding: 15px;
+            border-left: 4px solid #ffc107;
+            margin: 15px 0;
+        }
+        .success {
+            background: #d4edda;
+            padding: 15px;
+            border-left: 4px solid #28a745;
+            margin: 15px 0;
+        }
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+        textarea {
+            width: 100%;
+            height: 300px;
+            font-family: 'Courier New', monospace;
+            padding: 10px;
+            border: 2px solid #3498db;
+            border-radius: 5px;
+            font-size: 11px;
+        }
+        button {
+            background: #27ae60;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        pre {
+            background: #f4f4f4;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 Capturar Payload Pagou.ai - Método Automático</h1>
+    
+    <div class="highlight">
+        <strong>⚠️ IMPORTANTE:</strong> Use o método "Preserve log" no DevTools para ver requisições que desaparecem rápido!
+    </div>
+
+    <div class="step">
+        <h2>📋 Método 1: Preserve Log (MAIS FÁCIL)</h2>
+        <ol>
+            <li>Abra a loja Shopify REAL: <a href="https://twqm8i-xi.myshopify.com" target="_blank">https://twqm8i-xi.myshopify.com</a></li>
+            <li>Abra o DevTools (F12)</li>
+            <li>Vá na aba <strong>Network</strong></li>
+            <li><strong>MARQUE A CAIXA "Preserve log"</strong> (fica no topo do Network, ao lado do ícone de limpar)</li>
+            <li>Filtre por: <code>pagou</code></li>
+            <li>Adicione um produto ao carrinho</li>
+            <li>Vá para o checkout</li>
+            <li>Agora a requisição NÃO vai desaparecer! Clique nela</li>
+            <li>Vá na aba <strong>Payload</strong> ou <strong>Request</strong></li>
+            <li>Copie o JSON completo e cole abaixo:</li>
+        </ol>
+    </div>
+
+    <div class="step">
+        <h2>📋 Método 2: Script Automático</h2>
+        <p>Cole este script no console da loja Shopify REAL ANTES de clicar em "Finalizar compra":</p>
+        <textarea id="scriptCode" readonly>// Cole este script no console da loja Shopify REAL
+(function() {
+    console.log('%c🔍 Monitor Pagou.ai ATIVADO', 'background: #222; color: #bada55; font-size: 16px; padding: 10px;');
+    
+    const originalFetch = window.fetch;
+    window.fetch = function(...args) {
+        const url = args[0];
+        const options = args[1] || {};
+        
+        if (typeof url === 'string' && url.includes('api-checkout.pagou.ai')) {
+            console.log('%c📤 REQUISIÇÃO CAPTURADA!', 'background: #0a0; color: #fff; font-size: 14px; padding: 5px;');
+            
+            if (options.body) {
+                try {
+                    const payload = typeof options.body === 'string' ? JSON.parse(options.body) : options.body;
+                    console.log('%c📦 PAYLOAD COMPLETO:', 'background: #00a; color: #fff; font-size: 14px; padding: 5px;');
+                    console.log(JSON.stringify(payload, null, 2));
+                    
+                    // Salva globalmente
+                    window.PAGOU_PAYLOAD = payload;
+                    console.log('%c✅ Payload salvo em window.PAGOU_PAYLOAD', 'background: #0a0; color: #fff; padding: 5px;');
+                    console.log('%c💡 Para ver: console.log(window.PAGOU_PAYLOAD)', 'background: #00a; color: #fff; padding: 5px;');
+                } catch (e) {
+                    console.error('Erro:', e);
+                }
+            }
+        }
+        
+        return originalFetch.apply(this, args);
+    };
+    
+    console.log('✅ Interceptação ativa! Agora clique em "Finalizar compra"');
+})();</textarea>
+        <button onclick="copiarScript()">📋 Copiar Script</button>
+        <p><strong>Como usar:</strong></p>
+        <ol>
+            <li>Copie o script acima</li>
+            <li>Abra a loja Shopify REAL</li>
+            <li>Abra o console (F12)</li>
+            <li>Cole o script e pressione Enter</li>
+            <li>Você verá: "🔍 Monitor Pagou.ai ATIVADO"</li>
+            <li>Adicione produto ao carrinho</li>
+            <li>Clique em "Finalizar compra"</li>
+            <li>O payload aparecerá automaticamente no console!</li>
+        </ol>
+    </div>
+
+    <div class="step">
+        <h2>📥 Cole o Payload Aqui</h2>
+        <textarea id="payloadInput" placeholder="Cole o payload JSON aqui..."></textarea>
+        <br>
+        <button onclick="analisar()">🔍 Analisar Payload</button>
+        <button onclick="copiarCodigo()">📋 Copiar para Código</button>
+    </div>
+
+    <div id="resultado"></div>
+
+    <script>
+        function copiarScript() {
+            const textarea = document.getElementById('scriptCode');
+            textarea.select();
+            document.execCommand('copy');
+            alert('✅ Script copiado! Cole no console da loja Shopify.');
+        }
+        
+        function analisar() {
+            const input = document.getElementById('payloadInput').value.trim();
+            const resultado = document.getElementById('resultado');
+            
+            if (!input) {
+                alert('Cole o payload primeiro!');
+                return;
+            }
+            
+            try {
+                const payload = JSON.parse(input);
+                
+                let html = '<div class="step"><h2>📊 Análise do Payload</h2>';
+                
+                // Verifica estrutura
+                if (payload.cart_payload && payload.cart_payload.items) {
+                    const items = payload.cart_payload.items;
+                    html += `<p class="success"><strong>✅ Itens encontrados:</strong> ${items.length}</p>`;
+                    
+                    if (items.length > 0) {
+                        const item = items[0];
+                        html += '<h3>🔍 Estrutura do Primeiro Item:</h3>';
+                        html += '<pre>' + JSON.stringify(item, null, 2) + '</pre>';
+                        
+                        html += '<h3>📋 Campos Identificados:</h3>';
+                        html += '<ul>';
+                        html += `<li><strong>id:</strong> <code>${item.id}</code> (${typeof item.id})</li>`;
+                        html += `<li><strong>product_id:</strong> <code>${item.product_id}</code> (${typeof item.product_id})</li>`;
+                        if (item.variant_id) html += `<li><strong>variant_id:</strong> <code>${item.variant_id}</code> (${typeof item.variant_id})</li>`;
+                        if (item.sku) html += `<li><strong>sku:</strong> <code>${item.sku}</code></li>`;
+                        if (item.handle) html += `<li><strong>handle:</strong> <code>${item.handle}</code></li>`;
+                        html += `<li><strong>price:</strong> <code>${item.price}</code> centavos</li>`;
+                        html += '</ul>';
+                    }
+                } else if (payload.cart_id) {
+                    html += '<p class="highlight"><strong>⚠️ Este parece ser um payload de segunda requisição (só tem cart_id).</strong></p>';
+                    html += '<p>Preciso ver a PRIMEIRA requisição que cria o carrinho com os produtos!</p>';
+                } else {
+                    html += '<p class="highlight"><strong>⚠️ Estrutura não reconhecida.</strong></p>';
+                    html += '<pre>' + JSON.stringify(payload, null, 2) + '</pre>';
+                }
+                
+                html += '</div>';
+                resultado.innerHTML = html;
+                
+                localStorage.setItem('pagou_payload_analisado', JSON.stringify(payload));
+                console.log('✅ Payload analisado!', payload);
+                
+            } catch (e) {
+                alert('❌ Erro ao analisar JSON: ' + e.message);
+            }
+        }
+        
+        function copiarCodigo() {
+            const input = document.getElementById('payloadInput').value.trim();
+            if (!input) {
+                alert('Cole o payload primeiro!');
+                return;
+            }
+            try {
+                const payload = JSON.parse(input);
+                const codigo = `// Payload capturado da loja Shopify real\nconst payloadFuncionando = ${JSON.stringify(payload, null, 2)};`;
+                const textarea = document.createElement('textarea');
+                textarea.value = codigo;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                alert('✅ Código copiado!');
+            } catch (e) {
+                alert('Erro: ' + e.message);
+            }
+        }
+    </script>
+</body>
+</html>
+

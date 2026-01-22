@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exemplo - Loja Clonada</title>
+  <link rel="stylesheet" href="cart-styles.css">
+</head>
+<body>
+  
+  <!-- Ícone do Carrinho (Fixo) -->
+  <div class="cart-icon" onclick="window.cart.openCartModal()">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+      <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
+    </svg>
+    <span class="cart-count" style="display: none;">0</span>
+  </div>
+
+  <!-- Modal do Carrinho -->
+  <div id="cart-modal" class="cart-modal">
+    <div class="cart-header">
+      <h2>Meu Carrinho</h2>
+      <button class="close-cart" onclick="window.cart.closeCartModal()">&times;</button>
+    </div>
+    
+    <div class="cart-body">
+      <div id="cart-items-container">
+        <!-- Itens serão inseridos aqui via JavaScript -->
+      </div>
+    </div>
+    
+    <div class="cart-footer">
+      <div class="cart-total-row">
+        <h3>Total:</h3>
+        <span id="cart-total" class="cart-total">R$ 0,00</span>
+      </div>
+      <button class="checkout-btn" onclick="window.cart.redirectToCheckout()">
+        Finalizar Compra
+      </button>
+    </div>
+  </div>
+
+  <!-- Overlay do Modal -->
+  <div class="cart-modal-overlay" onclick="window.cart.closeCartModal()"></div>
+
+  <!-- Conteúdo da Página (Exemplo) -->
+  <div style="padding: 100px 20px; max-width: 1200px; margin: 0 auto;">
+    <h1>Loja de Exemplo</h1>
+    <p>Esta é uma página de exemplo mostrando como integrar o sistema de carrinho.</p>
+    
+    <!-- Exemplo de Produto -->
+    <div style="border: 1px solid #ddd; padding: 20px; margin: 20px 0; border-radius: 8px;">
+      <img src="https://via.placeholder.com/300x300" alt="Produto Exemplo" style="width: 100%; max-width: 300px; border-radius: 8px;">
+      <h3>Juego Comedor Terraza Jardin Exterior</h3>
+      <p>Conjunto de mesa e 4 cadeiras para área externa</p>
+      <p style="font-size: 24px; font-weight: bold;">R$ 1.299,00</p>
+      
+      <button 
+        class="add-to-cart-btn"
+        data-product-id="prod-001"
+        data-product-handle="juego-comedor-terraza-jardin-exterior-4-sillas-y-quitasol-metal-1"
+        data-product-title="Juego Comedor Terraza Jardin Exterior"
+        data-product-price="1299.00"
+        data-product-image="https://via.placeholder.com/300x300"
+        data-product-url="/products/juego-comedor"
+        data-checkout-id="323e135e-2538-486f-a7e4-045d8e4dfffa"
+        style="padding: 15px 30px; background: #000; color: #fff; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; font-weight: 600;">
+        Adicionar ao Carrinho
+      </button>
+    </div>
+
+    <!-- Outro Produto de Exemplo -->
+    <div style="border: 1px solid #ddd; padding: 20px; margin: 20px 0; border-radius: 8px;">
+      <img src="https://via.placeholder.com/300x300/ff6b6b" alt="Produto Exemplo 2" style="width: 100%; max-width: 300px; border-radius: 8px;">
+      <h3>Produto de Exemplo 2</h3>
+      <p>Descrição do produto de exemplo</p>
+      <p style="font-size: 24px; font-weight: bold;">R$ 599,00</p>
+      
+      <button 
+        class="add-to-cart-btn"
+        data-product-id="prod-002"
+        data-product-handle="produto-exemplo-2"
+        data-product-title="Produto de Exemplo 2"
+        data-product-price="599.00"
+        data-product-image="https://via.placeholder.com/300x300/ff6b6b"
+        data-product-url="/products/exemplo-2"
+        data-checkout-id="OUTRO-UUID-AQUI"
+        style="padding: 15px 30px; background: #000; color: #fff; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; font-weight: 600;">
+        Adicionar ao Carrinho
+      </button>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="cart-system.js"></script>
+</body>
+</html>

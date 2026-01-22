@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Como Capturar Payload Pagou.ai</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .step {
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .step h3 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+        .step-number {
+            background: #3498db;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+        .screenshot {
+            background: #e8e8e8;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            text-align: center;
+            color: #666;
+        }
+        textarea {
+            width: 100%;
+            height: 200px;
+            font-family: 'Courier New', monospace;
+            padding: 10px;
+            border: 2px solid #3498db;
+            border-radius: 5px;
+            font-size: 12px;
+        }
+        button {
+            background: #27ae60;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background: #229954;
+        }
+        .highlight {
+            background: #fff3cd;
+            padding: 15px;
+            border-left: 4px solid #ffc107;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 Como Capturar o Payload da Pagou.ai</h1>
+    
+    <div class="highlight">
+        <strong>⚠️ IMPORTANTE:</strong> Siga os passos abaixo na loja Shopify REAL (https://twqm8i-xi.myshopify.com)
+    </div>
+
+    <div class="step">
+        <h3><span class="step-number">1</span>Abra a Loja Shopify Real</h3>
+        <p>Abra em uma nova aba: <a href="https://twqm8i-xi.myshopify.com" target="_blank">https://twqm8i-xi.myshopify.com</a></p>
+    </div>
+
+    <div class="step">
+        <h3><span class="step-number">2</span>Abra o DevTools</h3>
+        <p>Pressione <code>F12</code> ou clique com botão direito → <strong>Inspecionar</strong></p>
+    </div>
+
+    <div class="step">
+        <h3><span class="step-number">3</span>Vá para a Aba Network</h3>
+        <p>No DevTools, clique na aba <strong>"Network"</strong> (Rede)</p>
+        <div class="screenshot">📸 Você verá uma lista vazia de requisições</div>
+    </div>
+
+    <div class="step">
+        <h3><span class="step-number">4</span>Filtre por "pagou"</h3>
+        <p>Na barra de filtro do Network, digite: <code>pagou</code></p>
+        <p>Isso vai mostrar apenas requisições relacionadas à Pagou.ai</p>
+    </div>
+
+    <div class="step">
+        <h3><span class="step-number">5</span>Adicione um Produto ao Carrinho</h3>
+        <p>Na loja Shopify, adicione qualquer produto ao carrinho</p>
+    </div>
+
+    <div class="step">
+        <h3><span class="step-number">6</span>Vá para o Checkout</h3>
+        <p>Clique em "Finalizar compra" ou "Checkout"</p>
+        <p>Você verá uma requisição aparecer no Network!</p>
+    </div>
+
+    <div class="step">
+        <h3><span class="step-number">7</span>Encontre a Requisição</h3>
+        <p>Procure por uma requisição chamada:</p>
+        <ul>
+            <li><code>cart</code> ou</li>
+            <li><code>api-checkout.pagou.ai</code></li>
+        </ul>
+        <p>Clique nela!</p>
+    </div>
+
+    <div class="step">
+        <h3><span class="step-number">8</span>Veja o Payload</h3>
+        <p>Com a requisição selecionada:</p>
+        <ol>
+            <li>Vá na aba <strong>"Payload"</strong> ou <strong>"Request"</strong></li>
+            <li>Procure por <strong>"Request Payload"</strong> ou <strong>"Request Body"</strong></li>
+            <li>Você verá um JSON grande - esse é o payload!</li>
+        </ol>
+    </div>
+
+    <div class="step">
+        <h3><span class="step-number">9</span>Copie o Payload</h3>
+        <p>Clique com botão direito no JSON → <strong>"Copy"</strong> → <strong>"Copy object"</strong></p>
+        <p>Ou selecione todo o texto e copie (Ctrl+C)</p>
+    </div>
+
+    <div class="step">
+        <h3><span class="step-number">10</span>Cole Aqui e Analise</h3>
+        <p>Cole o payload copiado no campo abaixo:</p>
+        <textarea id="payloadInput" placeholder="Cole o payload JSON aqui..."></textarea>
+        <br>
+        <button onclick="analisar()">🔍 Analisar Payload</button>
+        <button onclick="copiarCodigo()">📋 Copiar para Código</button>
+    </div>
+
+    <div id="resultado" style="margin-top: 30px;"></div>
+
+    <script>
+        function analisar() {
+            const input = document.getElementById('payloadInput').value.trim();
+            const resultado = document.getElementById('resultado');
+            
+            if (!input) {
+                alert('Cole o payload primeiro!');
+                return;
+            }
+            
+            try {
+                const payload = JSON.parse(input);
+                
+                let html = '<div class="step"><h2>📊 Análise do Payload</h2>';
+                
+                if (payload.cart_payload && payload.cart_payload.items) {
+                    const items = payload.cart_payload.items;
+                    html += `<p><strong>✅ Itens encontrados:</strong> ${items.length}</p>`;
+                    
+                    if (items.length > 0) {
+                        const item = items[0];
+                        html += '<h3>🔍 Estrutura do Primeiro Item:</h3>';
+                        html += '<pre style="background: #f4f4f4; padding: 15px; border-radius: 5px; overflow-x: auto;">';
+                        html += JSON.stringify(item, null, 2);
+                        html += '</pre>';
+                        
+                        html += '<h3>📋 Campos Importantes Identificados:</h3>';
+                        html += '<ul>';
+                        html += `<li><strong>id:</strong> <code>${item.id}</code> (tipo: ${typeof item.id})</li>`;
+                        html += `<li><strong>product_id:</strong> <code>${item.product_id}</code> (tipo: ${typeof item.product_id})</li>`;
+                        if (item.variant_id) html += `<li><strong>variant_id:</strong> <code>${item.variant_id}</code> (tipo: ${typeof item.variant_id})</li>`;
+                        if (item.sku) html += `<li><strong>sku:</strong> <code>${item.sku}</code></li>`;
+                        if (item.handle) html += `<li><strong>handle:</strong> <code>${item.handle}</code></li>`;
+                        html += `<li><strong>price:</strong> <code>${item.price}</code> centavos</li>`;
+                        html += '</ul>';
+                    }
+                }
+                
+                html += '</div>';
+                resultado.innerHTML = html;
+                
+                // Salva no localStorage
+                localStorage.setItem('pagou_payload_analisado', JSON.stringify(payload));
+                console.log('✅ Payload analisado e salvo!', payload);
+                
+            } catch (e) {
+                alert('❌ Erro ao analisar JSON: ' + e.message + '\n\nVerifique se copiou o JSON completo.');
+            }
+        }
+        
+        function copiarCodigo() {
+            const input = document.getElementById('payloadInput').value.trim();
+            
+            if (!input) {
+                alert('Cole o payload primeiro!');
+                return;
+            }
+            
+            try {
+                const payload = JSON.parse(input);
+                const codigo = `// Payload capturado da loja Shopify real\nconst payloadFuncionando = ${JSON.stringify(payload, null, 2)};`;
+                
+                const textarea = document.createElement('textarea');
+                textarea.value = codigo;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                
+                alert('✅ Código copiado! Cole no seu editor.');
+            } catch (e) {
+                alert('Erro: ' + e.message);
+            }
+        }
+    </script>
+</body>
+</html>
+

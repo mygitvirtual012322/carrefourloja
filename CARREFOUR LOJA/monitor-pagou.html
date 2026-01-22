@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Monitor Pagou.ai - Capturar Payload</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        #instructions { background: #f0f0f0; padding: 15px; border-radius: 5px; margin-bottom: 20px; }
+        #captured { background: #000; color: #0f0; padding: 15px; border-radius: 5px; max-height: 500px; overflow-y: auto; }
+        button { padding: 10px 20px; font-size: 16px; cursor: pointer; }
+        pre { white-space: pre-wrap; word-wrap: break-word; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Monitor Pagou.ai - Capturar Payload</h1>
+    
+    <div id="instructions">
+        <h2>📋 Instruções:</h2>
+        <ol>
+            <li>Abra a loja Shopify REAL (com a integração funcionando): <strong>https://twqm8i-xi.myshopify.com</strong></li>
+            <li>Abra o DevTools (F12) → Aba <strong>Network</strong></li>
+            <li>Filtre por: <strong>"pagou"</strong> ou <strong>"checkout"</strong></li>
+            <li>Adicione um produto ao carrinho</li>
+            <li>Vá para o checkout</li>
+            <li>Procure a requisição para <strong>api-checkout.pagou.ai</strong></li>
+            <li>Clique na requisição → Aba <strong>Payload</strong> ou <strong>Request</strong></li>
+            <li>Copie o JSON completo e cole aqui:</li>
+        </ol>
+    </div>
+
+    <textarea id="payloadInput" placeholder="Cole aqui o payload JSON da requisição que funcionou..." style="width: 100%; height: 200px; font-family: monospace;"></textarea>
+    <br><br>
+    <button onclick="analyzePayload()">Analisar Payload</button>
+    <button onclick="copyToCode()">Copiar para Código</button>
+    
+    <div id="result"></div>
+    <div id="captured"></div>
+
+    <script>
+        function analyzePayload() {
+            const input = document.getElementById('payloadInput').value;
+            const resultDiv = document.getElementById('result');
+            const capturedDiv = document.getElementById('captured');
+            
+            if (!input.trim()) {
+                alert('Cole o payload primeiro!');
+                return;
+            }
+            
+            try {
+                const payload = JSON.parse(input);
+                console.log('📦 Payload analisado:', payload);
+                
+                // Analisa a estrutura
+                let analysis = '<h2>📊 Análise do Payload:</h2>';
+                
+                if (payload.cart_payload && payload.cart_payload.items) {
+                    const items = payload.cart_payload.items;
+                    analysis += `<p><strong>Itens encontrados:</strong> ${items.length}</p>`;
+                    
+                    if (items.length > 0) {
+                        const firstItem = items[0];
+                        analysis += '<h3>🔍 Estrutura do Item:</h3>';
+                        analysis += '<pre>' + JSON.stringify(firstItem, null, 2) + '</pre>';
+                        
+                        analysis += '<h3>📋 Campos Importantes:</h3>';
+                        analysis += '<ul>';
+                        analysis += `<li><strong>id:</strong> ${firstItem.id} (tipo: ${typeof firstItem.id})</li>`;
+                        analysis += `<li><strong>product_id:</strong> ${firstItem.product_id} (tipo: ${typeof firstItem.product_id})</li>`;
+                        analysis += `<li><strong>variant_id:</strong> ${firstItem.variant_id} (tipo: ${typeof firstItem.variant_id})</li>`;
+                        if (firstItem.sku) analysis += `<li><strong>sku:</strong> ${firstItem.sku}</li>`;
+                        if (firstItem.handle) analysis += `<li><strong>handle:</strong> ${firstItem.handle}</li>`;
+                        analysis += `<li><strong>price:</strong> ${firstItem.price} (centavos)</li>`;
+                        analysis += '</ul>';
+                    }
+                }
+                
+                resultDiv.innerHTML = analysis;
+                capturedDiv.innerHTML = '<h3>📦 Payload Completo:</h3><pre>' + JSON.stringify(payload, null, 2) + '</pre>';
+                
+            } catch (e) {
+                alert('Erro ao analisar JSON: ' + e.message);
+            }
+        }
+        
+        function copyToCode() {
+            const input = document.getElementById('payloadInput').value;
+            if (!input.trim()) {
+                alert('Cole o payload primeiro!');
+                return;
+            }
+            
+            try {
+                const payload = JSON.parse(input);
+                const code = `
+// Payload capturado da loja Shopify real
+const capturedPayload = ${JSON.stringify(payload, null, 2)};
+
+// Use este payload exato no código
+`;
+                
+                const textarea = document.createElement('textarea');
+                textarea.value = code;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                
+                alert('✅ Código copiado para a área de transferência!');
+            } catch (e) {
+                alert('Erro: ' + e.message);
+            }
+        }
+    </script>
+</body>
+</html>
+

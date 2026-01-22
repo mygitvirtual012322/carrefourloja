@@ -1,0 +1,30 @@
+{
+    "name": "shopify-clone-checkout",
+    "version": "1.0.0",
+    "description": "Sistema para clonar loja Shopify e integrar com checkout externo",
+    "main": "server.js",
+    "scripts": {
+        "start": "node server.js",
+        "clone": "node shopify-scraper.js",
+        "serve": "npx http-server cloned-store -p 8080 -o",
+        "dev": "node server.js"
+    },
+    "keywords": [
+        "shopify",
+        "clone",
+        "checkout",
+        "scraper"
+    ],
+    "author": "",
+    "license": "MIT",
+    "dependencies": {
+        "express": "^4.22.1",
+        "puppeteer": "^21.0.0"
+    },
+    "devDependencies": {
+        "http-server": "^14.1.1"
+    },
+    "engines": {
+        "node": ">=18.0.0"
+    }
+}
