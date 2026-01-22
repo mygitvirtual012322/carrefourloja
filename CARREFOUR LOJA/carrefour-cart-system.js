@@ -64,32 +64,10 @@
         
         interceptCartIconClick() {
             const self = this;
-            // Intercepta cliques no ícone do carrinho GLOBALMENTE
-            document.addEventListener('click', function(e) {
-                const cartIcon = e.target.closest('.cfar-ico--cart, a[href*="/cart"], a[href*="cart"]');
-                if (cartIcon) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    e.stopImmediatePropagation();
-                    
-                    // Verifica se já está no cart - se sim, não faz nada
-                    const currentPath = window.location.pathname;
-                    if (currentPath.includes('/cart') || currentPath.includes('cart/index.html')) {
-                        console.log('🛒 Já está no carrinho, não redireciona');
-                        return false;
-                    }
-                    
-                    console.log('🛒 Ícone do carrinho clicado - redirecionando para nosso cart');
-                    const cartPath = self.getCartPath();
-                    // Usa replace para evitar flash
-                    window.location.replace(cartPath);
-                    return false;
-                }
-            }, true); // Capture phase - executa ANTES de outros listeners
             
             // Remove hrefs dos links do carrinho para evitar navegação
             const removeCartHrefs = () => {
-                const cartLinks = document.querySelectorAll('.cfar-ico--cart, a[href*="myshopify.com/cart"], a[href="/cart"]');
+                const cartLinks = document.querySelectorAll('.cfar-ico--cart');
                 cartLinks.forEach(link => {
                     const href = link.getAttribute('href');
                     if (href && (href.includes('myshopify.com/cart') || href === '/cart' || href.includes('/cart'))) {
@@ -107,6 +85,32 @@
             // Remove hrefs quando o DOM mudar (para elementos dinâmicos)
             const observer = new MutationObserver(removeCartHrefs);
             observer.observe(document.body, { childList: true, subtree: true });
+            
+            // Intercepta cliques APENAS no ícone do carrinho (mais específico)
+            document.addEventListener('click', function(e) {
+                // Verifica se o clique foi especificamente no ícone do carrinho
+                const cartIcon = e.target.closest('.cfar-ico--cart');
+                if (!cartIcon) {
+                    return; // Não é o ícone do carrinho, deixa passar
+                }
+                
+                e.preventDefault();
+                e.stopPropagation();
+                e.stopImmediatePropagation();
+                
+                // Verifica se já está no cart - se sim, não faz nada
+                const currentPath = window.location.pathname;
+                if (currentPath.includes('/cart') || currentPath.includes('cart/index.html')) {
+                    console.log('🛒 Já está no carrinho, não redireciona');
+                    return false;
+                }
+                
+                console.log('🛒 Ícone do carrinho clicado - redirecionando para nosso cart');
+                const cartPath = self.getCartPath();
+                // Usa replace para evitar flash
+                window.location.replace(cartPath);
+                return false;
+            }, true); // Capture phase - executa ANTES de outros listeners
         }
         
         interceptCheckoutForms() {
