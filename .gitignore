@@ -1,6 +1,6 @@
 # Dependencies
 node_modules/
-package-lock.json
+# package-lock.json - necessário para npm ci no Railway
 
 # Railway cache (se necessário)
 .railway/
