@@ -92,13 +92,20 @@
                 removeCartHrefs();
             }
             
-            // Remove hrefs quando o DOM mudar (mas com debounce para não ficar em loop)
+            // Remove hrefs quando o DOM mudar (mas com debounce e apenas para elementos novos)
             let observerTimeout;
-            const observer = new MutationObserver(() => {
+            const observer = new MutationObserver((mutations) => {
+                // Só processa se realmente adicionou novos elementos
+                const hasNewElements = mutations.some(m => m.addedNodes.length > 0);
+                if (!hasNewElements) {
+                    return;
+                }
+                
                 clearTimeout(observerTimeout);
-                observerTimeout = setTimeout(removeCartHrefs, 100);
+                observerTimeout = setTimeout(removeCartHrefs, 200);
             });
-            observer.observe(document.body, { childList: true, subtree: true });
+            // Observa apenas mudanças em childList, não em attributes para evitar loops
+            observer.observe(document.body, { childList: true, subtree: false });
             
             // Intercepta cliques APENAS no ícone do carrinho (muito específico)
             document.addEventListener('click', function(e) {
